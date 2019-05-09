@@ -14,7 +14,7 @@ export class AppComponent {
   }
 
   testWS() {
-    const subject = webSocket('ws://localhost:3000');
+    const subject = webSocket('ws://localhost:6379');
 
     subject.subscribe(
       events => console.log('message received: ' + events), // Called whenever there is a message from the server.
