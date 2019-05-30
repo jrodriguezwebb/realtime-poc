@@ -21,8 +21,8 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('identity')
-  async identity(client: Client, data: number): Promise<number> {
+  async identity(client: Client, data: number): Promise<object> {
     console.log(data);
-    return data;
+    return { event: 'identity', data: `${data}` };
   }
 }
