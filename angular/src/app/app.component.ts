@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket';
+import { tap, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,30 @@ export class AppComponent {
   }
 
   testWS() {
-    const subject = webSocket('ws://localhost:6379');
+    const subject = webSocket('ws://localhost:8080');
 
-    subject.subscribe(
-      events => console.log('message received: ' + events), // Called whenever there is a message from the server.
-      err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
-      () => console.log('complete') // Called when connection is closed (for whatever reason).
+    // llama al listener events que se dispara del lado del servidor
+    subject.next({
+      event: 'events',
+      data: 'test',
+    });
+
+    subject.next({
+      event: 'identity',
+      data: 1,
+    });
+
+    subject.pipe(select('events')).subscribe(
+      (data) => console.log(data),
+      (err) => console.log(err),
+      () => console.log('complete')
     );
   }
 }
+
+// Operator
+export const select = (event: string) => filter((data: any)  => {
+  if (data.event === event) {
+    return data;
+  }
+});
