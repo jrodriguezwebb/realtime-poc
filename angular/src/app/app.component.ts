@@ -28,6 +28,7 @@ export class AppComponent {
       data: 1,
     });
 
+    // subject.pipe(select('identity')).subscribe(
     subject.pipe(select('events')).subscribe(
       (data) => console.log(data),
       (err) => console.log(err),
@@ -37,8 +38,4 @@ export class AppComponent {
 }
 
 // Operator
-export const select = (event: string) => filter((data: any)  => {
-  if (data.event === event) {
-    return data;
-  }
-});
+export const select = (needle: string = '') => filter((data: any)  => data.event === needle );
